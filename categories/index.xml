@@ -6,30 +6,9 @@
     <description>Recent content in Categories on Trevor Blanchard</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Apr 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>syntax</title>
-      <link>/blog/categories/syntax/</link>
-      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/categories/syntax/</guid>
-      <description></description>
-      
-    </item>
-    
-    <item>
-      <title>themes</title>
-      <link>/blog/categories/themes/</link>
-      <pubDate>Thu, 16 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/categories/themes/</guid>
-      <description></description>
-      
-    </item>
     
   </channel>
 </rss>

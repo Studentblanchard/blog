@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>Post Primum&nbsp;&ndash;&nbsp;Trevor Blanchard</title><link rel="stylesheet" href="/blog/css/core.min.c397c83cce09290c316375d28ae0be286b4cb635593abfd808e9b81022818cf702412d23fe3377b393144848ccbf9f85.css" integrity="sha384-w5fIPM4JKQwxY3XSiuC&#43;KGtMtjVZOr/YCOm4ECKBjPcCQS0j/jN3s5MUSEjMv5&#43;F"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Post Primum" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/blog/"><span class="site name">Trevor Blanchard</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/blog/categories/">Categories</a><a class="nav item" href="/blog/tags/">Tags</a><a class="nav item" href="/blog/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">For the love of code</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">Post Primum</h1><p class="article date">Apr 16, 2020<span class="reading-time"> • 4 minutes to read</span></p></section><article class="article markdown-body"><p>Welcome! Cheers! 🍷</p>
+<p>While my roommate and I are stranded inside during this COVID-19 crises, we have been drinking more often than we probably should; and much of that consumption has been red wine. Now, we are not wine snobs, we will proudly buy all the sub $10 bottles we can find during a trip to the MLCC. But that&rsquo;s not to say that we don&rsquo;t enjoy finer wines or that we don&rsquo;t have some pricier favorites. My roommate is studying behavioral psychology and I am a software engineer, we both have an interest in how things work and studying commonalities. One night, our collective (and drunk) minds decided that we needed a better way of tracking all the wines we drank and what we thought of them, maybe even a way of prediciting future wines we would like - to help us decided on our next wine. Of course, there is probably thousands of sites that could help us pick wines but we wanted to do it our selves! We came up with a very rough idea of what we wanted, popped the cork on another bottle and got to work one Wednesday night.</p>
+<h5 id="harvesting">Harvesting</h5>
+<p>We first needed to figure out what data we wanted to keep track of for each wine, there would be two components; first, objective facts about the wine, and second, our subjective opinions of it.</p>
+<ul>
+<li>Name</li>
+<li>Year</li>
+<li>Varietal(s)</li>
+<li>Colour</li>
+<li>Country</li>
+<li>Region</li>
+<li>Proof</li>
+<li>Keywords</li>
+<li>Tasting Notes</li>
+<li>Pairings</li>
+<li>Label Style</li>
+<li>Name Style</li>
+<li>Comments (Was it funny like Goats do Roam?)</li>
+</ul>
+<p>This list is probably a little further than I would have went myself, but my roommate was super enthusiastic about this, he went all out! Arguably, &ldquo;Comments&rdquo; belongs in the subjective part of the data but it&rsquo;s fine for now.</p>
+<p>Next we had to decide what questions we would ask ourselves with each bottle, we came up with 5 questions.</p>
+<ul>
+<li>Taste Score</li>
+<li>Enjoyability</li>
+<li>Label Score</li>
+<li>Name Score</li>
+<li>How will you use this wine</li>
+</ul>
+<p>Each of the first four questions was on a scale from 1 - 7 with the last question allowing multiple selections.</p>
+<p>Now that we knew what we would keep track of we needed to decide how we would do this, Google Drive was the obvious answer here. It meant we could easily share documents AND had the added bonus of Google Forms + Sheets integration that works really simply out of the boxed wine, uh I mean box. We would have one sheet that had all the objective data about the wine, each time we would bring home a new bottle we would fill this out. Next we made a Google Forms survey with our five questions, plus a drop down wine list and a field for us to put our email so we knew who filled out the survey. I wrote a little Google Script that would trigger each time anyone edited our wine sheet and populate the dropdown in the form with our wine list. It worked flawlessly.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 0
+</span><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">onEdit</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">sheet</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">getActiveSpreadsheet</span><span class="p">().</span><span class="nx">getActiveSheet</span><span class="p">()</span>
+    <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">FormApp</span><span class="p">.</span><span class="nx">openById</span><span class="p">(</span><span class="cm">/*Sheeeet, son*/</span><span class="p">)</span>
+
+    <span class="c1">// data starts in row 4 and column C - E have the name, year and varietal.
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">sheet</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="s1">&#39;C4:E1000&#39;</span><span class="p">).</span><span class="nx">getValues</span><span class="p">()</span>
+    
+    <span class="kd">var</span> <span class="nx">formElement</span> <span class="o">=</span> <span class="nx">form</span><span class="p">.</span><span class="nx">getItems</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">asListItem</span><span class="p">()</span>
+    <span class="kd">var</span> <span class="nx">choices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]){</span>
+        <span class="nx">choices</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">break</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">formElement</span><span class="p">.</span><span class="nx">setChoiceValues</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>If you haven&rsquo;t used Google Script before, it&rsquo;s basically just Javascript with some extra stuff built in to interact with Google&rsquo;s offerings. Arguably, the above code is far from perfect, I&rsquo;m grabbing all the data from rows up to 1000 since we probably wont get through 1000 bottles anytime soon but there&rsquo;s gotta be a better way to get the none empty rows. Getting this code to trigger is easy too, when you&rsquo;ve got your script open just find <code>edit -&gt; triggers</code> you&rsquo;ll beable to choose from many triggers and link a function from your code as a callback, for my purpose I chose to trigger on edit so that each time we add a new wine to the list our form gets updated.</p>
+<p>All that was left to do was start collecting data 😏</p>
+</article><section class="article labels"><a class="tag" href=/blog/tags/google-sheets/>Google Sheets</a><a class="tag" href=/blog/tags/google-forms/>Google Forms</a><a class="tag" href=/blog/tags/javascript/>Javascript</a></section></div></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">Trevor Blanchard</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section></div>
+</body>
+
+</html>
